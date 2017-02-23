@@ -1,0 +1,50 @@
+#!/bin/sh /etc/rc.common
+
+START=93
+PROG=/usr/sbin/vlmcsd
+CONFIG=/etc/vlmcsd.ini
+LOG=/var/log/vlmcsd.log
+
+get_config()
+{
+	config_get_bool enable $1 enable 0
+	config_get_bool use_conf_file $1 use_conf_file 0
+	config_get port $1 port
+	config_get ato_act $1 ato_act
+}
+
+start()
+{
+	config_load vlmcsd
+	config_foreach get_config vlmcsd
+	[ $enable -eq 0 ] && exit 0
+	
+	if [ "$ato_act" = "enable" ]; then
+		[ -n "`awk '/^srv-host=_vlmcs\._tcp/' /etc/dnsmasq.conf`" ] && sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
+		if [ -z $HOSTNAME ];then
+			local HOSTNAME=`uci get system.@system[0].hostname`
+		fi
+		sed -i '$a\srv-host=_vlmcs\._tcp,'"$HOSTNAME"',1688,0,100' /etc/dnsmasq.conf
+		/etc/init.d/dnsmasq restart
+	else
+		if [ -n "`awk '/^srv-host=_vlmcs\._tcp/' /etc/dnsmasq.conf`" ];then
+			sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
+			/etc/init.d/dnsmasq restart
+		fi
+	fi
+	
+	if [ $use_conf_file -eq 1 ]; then
+		$PROG -i $CONFIG
+	else
+		$PROG -d -p $port -l $LOG
+	fi
+}
+
+stop()
+{
+	killall vlmcsd
+	if [ -n "`awk '/^srv-host=_vlmcs\._tcp/' /etc/dnsmasq.conf`" ];then
+		sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
+		/etc/init.d/dnsmasq restart
+	fi
+}

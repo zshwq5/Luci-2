@@ -1,0 +1,40 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "KMS server is on"
+msgstr "KMS服务器运行中"
+
+msgid "KMS server is off"
+msgstr "KMS服务器未运行"
+
+msgid "KMS Server"
+msgstr "KMS服务器"
+
+msgid "Basic Settings"
+msgstr "基本设置"
+
+msgid "enable"
+msgstr "启用"
+
+msgid "Use config file"
+msgstr "使用配置文件"
+
+msgid "Auto activate"
+msgstr "自动激活"
+
+msgid "Reference tutorial"
+msgstr "参考教程"
+
+msgid "Local Port"
+msgstr "本地端口"
+
+msgid "config"
+msgstr "配置"
+
+msgid "Log"
+msgstr "日志"
+
+msgid "Each line of the beginning of the numeric sign (#) or semicolon (;) is treated as a comment, removing the semicolon (;) to enable the option."
+msgstr "开头数字符号（＃）或分号（;）的每一行被视为注释，去除分号（;）启用选项。"
+
+
