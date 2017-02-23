@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/981213/luci-1/!svn/ver/9503/trunk/applications/luci-app-usb-printer/root/etc/hotplug.d/usb
+END
+10-usb_printer
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/981213/luci-1/!svn/ver/9503/trunk/applications/luci-app-usb-printer/root/etc/hotplug.d/usb/10-usb_printer
+END

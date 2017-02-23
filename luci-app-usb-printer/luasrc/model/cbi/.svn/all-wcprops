@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/981213/luci-1/!svn/ver/9503/trunk/applications/luci-app-usb-printer/luasrc/model/cbi
+END
+usb_printer.lua
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/981213/luci-1/!svn/ver/9503/trunk/applications/luci-app-usb-printer/luasrc/model/cbi/usb_printer.lua
+END
