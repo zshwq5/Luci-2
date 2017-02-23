@@ -13,7 +13,7 @@ end
 
 m = Map("vlmcsd")
 m.title	= translate("KMS Server")
-m.description = translate("Version: ") .. ver .. "<br /> " .. Status
+m.description = translate("Current Version") .. ": " .. ver .. "<br /> " .. Status
 m.redirect = luci.dispatcher.build_url("admin","services","vlmcsd")
 
 s = m:section(TypedSection, "vlmcsd")
@@ -30,12 +30,12 @@ o = s:taboption("basic", Flag, "use_conf_file")
 o.title = translate("Use config file")
 o.rmempty = false
 
-o = s:taboption("basic", ListValue, "ato_act", translate("Auto activate"),
+o = s:taboption("basic", ListValue, "ato_act", translate("Auto Activation"),
 	"<a href=\"http://www.right.com.cn/forum/thread-174651-1-1.html\">" ..
 	translate("Reference tutorial") ..
 	"</a>")
-o:value("disable")
-o:value("enable")
+o:value("disable", translate("disable"))
+o:value("enable", translate("enable"))
 
 o = s:taboption("basic", Value, "port")
 o.title = translate("Local Port")

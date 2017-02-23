@@ -10,16 +10,22 @@ msgstr "KMS服务器未运行"
 msgid "KMS Server"
 msgstr "KMS服务器"
 
+msgid "Current Version"
+msgstr "当前版本"
+
 msgid "Basic Settings"
 msgstr "基本设置"
 
 msgid "enable"
 msgstr "启用"
 
+msgid "disable"
+msgstr "禁用"
+
 msgid "Use config file"
 msgstr "使用配置文件"
 
-msgid "Auto activate"
+msgid "Auto Activation"
 msgstr "自动激活"
 
 msgid "Reference tutorial"
