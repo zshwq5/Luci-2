@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/981213/lede_src/!svn/ver/36974/trunk/package/my_package/luci-default-chinese/files
+END
+ucidef.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/981213/lede_src/!svn/ver/36974/trunk/package/my_package/luci-default-chinese/files/ucidef.sh
+END
