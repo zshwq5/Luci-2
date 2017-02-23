@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/981213/luci-1/!svn/ver/9503/trunk/applications/luci-app-syncdial/root/etc/hotplug.d/iface
+END
+01-dialcheck
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/981213/luci-1/!svn/ver/9503/trunk/applications/luci-app-syncdial/root/etc/hotplug.d/iface/01-dialcheck
+END
