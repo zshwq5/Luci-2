@@ -1,0 +1,13 @@
+
+config status
+
+config global
+	option dns_mode 'D'
+	option enabled '0'
+	option global_server 'nil'
+	option proxy_mode 'B'
+
+config upstream_dns
+	option safe_dns '8.8.8.8'
+	option safe_dns_port '53'
+

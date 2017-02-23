@@ -1,0 +1,182 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-15\n"
+"PO-Revision-Date: 2016-11-08 20:36+0800\n"
+"Last-Translator: Captain Jack <jc327134435@gmail>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.1\n"
+
+msgid "Shadowsocksr Transparent Proxy"
+msgstr "Shadowsocksr透明代理"
+
+msgid "A fast secure tunnel proxy that help you get through firewalls on your router"
+msgstr "路由器上用于穿越防火墙的快速、安全的代理服务"
+
+msgid "Running Status"
+msgstr "运行状态"
+
+msgid "Running"
+msgstr "运行中"
+
+msgid "Not running"
+msgstr "未运行"
+
+msgid "ssr-redir"
+msgstr "透明代理"
+
+msgid "ssr-local"
+msgstr "Socks5代理"
+
+msgid "ssr-tunnel"
+msgstr "UDP转发"
+
+msgid "Global Setting"
+msgstr "全局设置"
+
+msgid "Enable"
+msgstr "启用"
+
+msgid "Choose Server"
+msgstr "选择节点"
+
+msgid "Proxy Mode"
+msgstr "代理模式"
+
+msgid "Disable Proxy"
+msgstr "禁用代理."
+
+msgid "All Public IPs"
+msgstr "所有公网IP"
+
+msgid "All non-China IPs"
+msgstr "所有非中国的IP"
+
+msgid "GFW-List based auto-proxy"
+msgstr "基于GFW-List的自动代理"
+
+msgid "GFW-List mode requires flushing DNS cache"
+msgstr "GFW-List模式需要刷新DNS缓存"
+
+msgid "Click here to customize your GFW-List"
+msgstr "点击此处自定义GFW列表"
+
+msgid "Watching Youku overseas"
+msgstr "海外看优酷（回国加速）"
+
+msgid "Dns resolution"
+msgstr "DNS解析"
+
+msgid "used to prevent DNS pollution."
+msgstr "用以防止DNS污染"
+
+msgid "pdnsd mode"
+msgstr "pdnsd 解析"
+
+msgid "pcap-dnsproxy mode"
+msgstr "pcap-dnsproxy 解析"
+
+msgid "enhanced mode: pcap-dnsproxy+socks5"
+msgstr "增强模式: pcap-dnsproxy+socks5"
+
+msgid "enhanced mode: pdnsd+pcap-dnsproxy"
+msgstr "增强模式: pdnsd+pcap-dnsproxy "
+
+msgid "udp relay"
+msgstr "udp转发"
+
+msgid "enhanced mode: pdnsd+udp relay"
+msgstr "增强模式: pdnsd+udp转发"
+
+msgid "Upstream DNS"
+msgstr "上游DNS"
+
+msgid "When using pdnsd,below will be pdnsd's upstream dns server"
+msgstr "当使用到pdnsd时,可以下面添加pdnsd的上游dns."
+
+msgid "When using udp relay mode,please set below to your udp dns request server"
+msgstr "当使用到udp转发时,请在下面设置udp转发dns."
+
+msgid "When using pure pcap mode,below makes no use"
+msgstr "当纯使用pcap时,下面的选项暂时不起作用."
+
+msgid "If you have no idea how to config,please keep it default."
+msgstr "如果你不了解如何配置,建议保持默认."
+
+msgid "Safe DNS"
+msgstr "DNS地址"
+
+msgid "8.8.8.8 or 8.8.4.4 is recommended"
+msgstr "推荐使用 8.8.8.8 或 8.8.4.4"
+
+msgid "Safe DNS Port"
+msgstr "DNS端口"
+
+msgid "Foreign DNS on UDP port 53 might be polluted"
+msgstr "使用UDP 53端口的国外DNS可能会被污染"
+
+msgid "Proxy Control"
+msgstr "代理控制"
+
+msgid "Controling proxy request for particular device."
+msgstr "用于控制指定设备的代理请求."
+
+msgid "In addition to the following device,the others will use global setting."
+msgstr "除了下列自定义设备,其它设备使用全局设置."
+
+msgid "Host"
+msgstr "设备"
+
+msgid "Servers List"
+msgstr "节点列表"
+
+msgid "Shadowsocksr Server Config"
+msgstr "节点配置"
+
+msgid "Server address allow ip address only.If you are using domain address,please transform it via ping it."
+msgstr "服务器地址仅支持ip形式.如果你用的是域名地址,请通过\"ping 域名\"转换成ip地址."
+
+msgid "If your server does not support ssr,please set \"protocol-origin;obfs-plain\" ."
+msgstr "如果你的账号不支持SSR,请设置 \"协议-origin；混淆-plain\" ."
+
+msgid "Remarks"
+msgstr "节点备注"
+
+msgid "Server Address"
+msgstr "服务器地址"
+
+msgid "Server Port"
+msgstr "服务器端口"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Encryption Method"
+msgstr "加密方法"
+
+msgid "Timeout"
+msgstr "超时"
+
+msgid "Protocol"
+msgstr "协议插件"
+
+msgid "Obfs Param"
+msgstr "混淆插件"
+
+msgid "shadowsocksr document"
+msgstr "shadowsocksr插件文档"
+
+msgid "plugin parameter"
+msgstr "插件参数"
+
+msgid "Warning！Mistaken use of this parameter may cause the server ip to be blocked."
+msgstr "警告!错误使用本参数有可能导致服务器ip被封,请谨慎使用!"
+
+msgid "obfs parameter"
+msgstr "混淆参数"
