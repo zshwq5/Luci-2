@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/981213/luci-1/!svn/ver/9503/trunk/applications/luci-app-ngrokc/luasrc/model/cbi/ngrokc
+END
+detail.lua
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/981213/luci-1/!svn/ver/9503/trunk/applications/luci-app-ngrokc/luasrc/model/cbi/ngrokc/detail.lua
+END
+overview.lua
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/981213/luci-1/!svn/ver/9503/trunk/applications/luci-app-ngrokc/luasrc/model/cbi/ngrokc/overview.lua
+END
