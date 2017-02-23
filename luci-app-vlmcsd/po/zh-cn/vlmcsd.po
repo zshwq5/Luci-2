@@ -22,6 +22,15 @@ msgstr "启用"
 msgid "disable"
 msgstr "禁用"
 
+msgid "Empty Log File"
+msgstr "清空日志"
+
+msgid "Every"
+msgstr "每"
+
+msgid "days"
+msgstr "天"
+
 msgid "Use config file"
 msgstr "使用配置文件"
 

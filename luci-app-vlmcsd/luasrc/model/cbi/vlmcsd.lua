@@ -37,6 +37,15 @@ o = s:taboption("basic", ListValue, "ato_act", translate("Auto Activation"),
 o:value("disable", translate("disable"))
 o:value("enable", translate("enable"))
 
+o = s:taboption("basic", ListValue, "emp_log", translate("Empty Log File"))
+for d=0,10 do
+	if ( d == 0 )
+	then
+		o:value(d, translate("disable"))
+	else
+		o:value(d, translate("Every") .. d ..translate("days"))
+	end
+end
 o = s:taboption("basic", Value, "port")
 o.title = translate("Local Port")
 o.datatype = "port"
