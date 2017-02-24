@@ -23,7 +23,6 @@ start()
 	config_foreach get_config vlmcsd
 	read_conf
 	[ $enable -eq 0 ] && exit 0
-	read_conf
     # 检查是否需增删或者修改计划任务
 	if [ $emp_log -ne 0 ];then
 		if [ -n "$whitecron" ];then
