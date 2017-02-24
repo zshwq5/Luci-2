@@ -66,6 +66,7 @@ start()
 	else
 		if [ -n "$srv_host" ];then
 			sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
+			/etc/init.d/dnsmasq restart
 		fi
 	fi
 	# 启动进程
