@@ -44,10 +44,10 @@ start()
 		fi
 	fi
 	# 检查是否需要增删或者修改dnsmasq配置
-	if [ "$ato_act" = "enable" ]; then
-		if [ -z "$HOSTNAME" ];then
+	if [ -z "$HOSTNAME" ];then
 			local HOSTNAME=`uci get system.@system[0].hostname`
-		fi
+	fi
+	if [ "$ato_act" = "enable" ]; then
 		if [ -n "$srv_host" ];then
 			if [ -n "$host_name" ];then
 				if [ "$HOSTNAME" != "$host_name" ];then
@@ -65,8 +65,7 @@ start()
 		fi
 	else
 		if [ -n "$srv_host" ];then
-			sed -i '$a\srv-host=_vlmcs\._tcp,'"$HOSTNAME"',1688,0,100' /etc/dnsmasq.conf
-			/etc/init.d/dnsmasq restart
+			sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
 		fi
 	fi
 	# 启动进程
