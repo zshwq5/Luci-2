@@ -1,7 +1,0 @@
-#!/bin/sh
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	( . /etc/uci-defaults/luci-app-vlmcsd ) && rm -f /etc/uci-defaults/luci-app-vlmcsd
-	rm -f /tmp/luci-indexcache
-	sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
-fi
-exit 0
