@@ -4,7 +4,6 @@ START=93
 PROG=/usr/sbin/vlmcsd
 CONFIG=/etc/vlmcsd.ini
 LOG=/var/log/vlmcsd.log
-
 get_config()
 {
 	config_get_bool enable $1 enable 0
@@ -13,32 +12,64 @@ get_config()
 	config_get ato_act $1 ato_act
 	config_get emp_log $1 emp_log
 }
-
+read_conf()
+{
+	whitecron=$(awk '/vlmcsd\.log/{print $3}' /etc/crontabs/root| awk -F '/' '{print $2}')
+	srv_host=$(awk '/^srv-host=_vlmcs\._tcp/' /etc/dnsmasq.conf)
+	host_name=$(awk -F ',' '/^srv-host=_vlmcs\._tcp/{print $2}' /etc/dnsmasq.conf)
+}
 start()
 {
 	config_load vlmcsd
 	config_foreach get_config vlmcsd
+	read_conf
 	[ $enable -eq 0 ] && exit 0
-	sed -i '/vlmcsd\.log/d' /etc/crontabs/root >/dev/null 2>&1
-	# whitecron=$(awk '/vlmcsd\.log/{print $3}' /etc/crontabs/root| awk -F '/' '{print $2}')
+	read_conf
+    # 检查是否需增删或者修改计划任务
 	if [ $emp_log -ne 0 ];then
+		if [ -n "$whitecron" ];then
+			if [ "$emp_log" -ne "$whitecron" ];then
+				sed -i '/vlmcsd\.log/d' /etc/crontabs/root >/dev/null 2>&1
+				echo "* * */$emp_log * * echo \"\" >/var/log/vlmcsd.log >/dev/null 2>&1" >> /etc/crontabs/root
+				/etc/init.d/cron restart >/dev/null 2>&1
+			fi
+		else
 			echo "* * */$emp_log * * echo \"\" >/var/log/vlmcsd.log >/dev/null 2>&1" >> /etc/crontabs/root
+			/etc/init.d/cron restart >/dev/null 2>&1
+		fi
+	else
+		if [ -n "$whitecron" ];then
+			sed -i '/vlmcsd\.log/d' /etc/crontabs/root >/dev/null 2>&1
+			/etc/init.d/cron restart >/dev/null 2>&1
+		fi
 	fi
-	/etc/init.d/cron restart >/dev/null 2>&1
+	# 检查是否需要增删或者修改dnsmasq配置
 	if [ "$ato_act" = "enable" ]; then
-		[ -n "`awk '/^srv-host=_vlmcs\._tcp/' /etc/dnsmasq.conf`" ] && sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
-		if [ -z $HOSTNAME ];then
+		if [ -z "$HOSTNAME" ];then
 			local HOSTNAME=`uci get system.@system[0].hostname`
 		fi
-		sed -i '$a\srv-host=_vlmcs\._tcp,'"$HOSTNAME"',1688,0,100' /etc/dnsmasq.conf
-		/etc/init.d/dnsmasq restart
+		if [ -n "$srv_host" ];then
+			if [ -n "$host_name" ];then
+				if [ "$HOSTNAME" != "$host_name" ];then
+					sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
+					sed -i '$a\srv-host=_vlmcs\._tcp,'"$HOSTNAME"',1688,0,100' /etc/dnsmasq.conf
+					/etc/init.d/dnsmasq restart
+				fi
+			else
+				sed -i '$a\srv-host=_vlmcs\._tcp,'"$HOSTNAME"',1688,0,100' /etc/dnsmasq.conf
+				/etc/init.d/dnsmasq restart
+			fi
+		else
+			sed -i '$a\srv-host=_vlmcs\._tcp,'"$HOSTNAME"',1688,0,100' /etc/dnsmasq.conf
+			/etc/init.d/dnsmasq restart
+		fi
 	else
-		if [ -n "`awk '/^srv-host=_vlmcs\._tcp/' /etc/dnsmasq.conf`" ];then
-			sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
+		if [ -n "$srv_host" ];then
+			sed -i '$a\srv-host=_vlmcs\._tcp,'"$HOSTNAME"',1688,0,100' /etc/dnsmasq.conf
 			/etc/init.d/dnsmasq restart
 		fi
 	fi
-	
+	# 启动进程
 	if [ $use_conf_file -eq 1 ]; then
 		$PROG -i $CONFIG
 	else
@@ -49,13 +80,11 @@ start()
 stop()
 {
 	killall vlmcsd
-	if [ -n "`awk '/^srv-host=_vlmcs\._tcp/' /etc/dnsmasq.conf`" ];then
+	read_conf
+	if [ -n "$srv_host" ];then
 		sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
-		/etc/init.d/dnsmasq restart
 	fi
-	whitecron=$(awk '/vlmcsd\.log/{print $3}' /etc/crontabs/root| awk -F '/' '{print $2}')
-	if [ -n $whitecron ];then
+	if [ -n "$whitecron" ];then
 		sed -i '/vlmcsd\.log/d' /etc/crontabs/root >/dev/null 2>&1
-		/etc/init.d/dnsmasq restart
 	fi
 }

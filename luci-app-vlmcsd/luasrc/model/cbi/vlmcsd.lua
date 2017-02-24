@@ -70,12 +70,18 @@ end
 
 --日志
 s:tab("log",translate("Log"))
-local logfile = "/var/log/vlmcsd.log"
-l = s:taboption("log", TextValue, "logfile")
-l.rows = 20
-l.wrap = "off"
-l.cfgvalue = function(self, section)
-	return NXFS.readfile(logfile) or ""
+local file = "/var/log/vlmcsd.log"
+o = s:taboption("log", TextValue, "logfile")
+o.rows = 20
+o.wrap = "off"
+o.cfgvalue = function(self, section)
+	return NXFS.readfile(file) or ""
+end
+o.cfgvalue = function(self, section)
+	return NXFS.readfile(file) or ""
+end
+o.write = function(self, section, value)
+	NXFS.writefile(file, value:gsub("\r\n", "\n"))
 end
 
 return m
