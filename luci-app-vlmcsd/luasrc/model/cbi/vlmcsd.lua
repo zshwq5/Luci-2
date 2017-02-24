@@ -3,6 +3,7 @@ local NXFS = require "nixio.fs"
 local SYS  = require "luci.sys"
 local UT = require "luci.util"
 local ver = UT.trim(SYS.exec("vlmcsd -V | awk '/built/{print $2}' | sed -n 's/,//p'"))
+local weekday = {[7]="disable", [0]="Sun", [1]="Mon", [2]="Tue", [3]="Wed", [4]="Thu", [5]="Fri", [6]="Sat"}
 --local ver = UT.trim(SYS.exec("vlmcsd -V | awk '/built/{print $1 \" \" $2 $3 \" \" $4}'"))
 
 if SYS.call("pidof vlmcsd >/dev/null") == 0 then
@@ -38,14 +39,23 @@ o:value("disable", translate("disable"))
 o:value("enable", translate("enable"))
 
 o = s:taboption("basic", ListValue, "emp_log", translate("Empty Log File"))
-for d=0,10 do
-	if ( d == 0 )
-	then
-		o:value(d, translate("disable"))
+o.default = 7
+for i,v in pairs(weekday) do
+	if v ~= "disable" then
+		o:value(i, translate("Every") .. " " .. translate(v))
 	else
-		o:value(d, translate("Every") .. d ..translate("days"))
+		o:value(i,translate(v))
 	end
 end
+
+-- for d=0,10 do
+	-- if ( d == 0 )
+	-- then
+		-- o:value(d, translate("disable"))
+	-- else
+		-- o:value(d, translate("Every") .. d ..translate("days"))
+	-- end
+-- end
 o = s:taboption("basic", Value, "port")
 o.title = translate("Local Port")
 o.datatype = "port"
