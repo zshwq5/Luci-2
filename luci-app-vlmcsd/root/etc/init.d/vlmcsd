@@ -15,7 +15,6 @@ get_config()
 read_conf()
 {
 	whitecron=$(awk '/vlmcsd\.log/{print $3}' /etc/crontabs/root| awk -F '/' '{print $2}')
-	srv_host=$(awk '/^srv-host=_vlmcs\._tcp/' /etc/dnsmasq.conf)
 	host_name=$(awk -F ',' '/^srv-host=_vlmcs\._tcp/{print $2}' /etc/dnsmasq.conf)
 }
 start()
@@ -48,14 +47,9 @@ start()
 			local HOSTNAME=`uci get system.@system[0].hostname`
 	fi
 	if [ "$ato_act" = "enable" ]; then
-		if [ -n "$srv_host" ];then
-			if [ -n "$host_name" ];then
-				if [ "$HOSTNAME" != "$host_name" ];then
-					sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
-					sed -i '$a\srv-host=_vlmcs\._tcp,'"$HOSTNAME"',1688,0,100' /etc/dnsmasq.conf
-					/etc/init.d/dnsmasq restart
-				fi
-			else
+		if [ -n "$host_name" ];then
+			if [ "$HOSTNAME" != "$host_name" ];then
+				sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
 				sed -i '$a\srv-host=_vlmcs\._tcp,'"$HOSTNAME"',1688,0,100' /etc/dnsmasq.conf
 				/etc/init.d/dnsmasq restart
 			fi
@@ -64,7 +58,7 @@ start()
 			/etc/init.d/dnsmasq restart
 		fi
 	else
-		if [ -n "$srv_host" ];then
+		if [ -n "$host_name" ];then
 			sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
 			/etc/init.d/dnsmasq restart
 		fi
@@ -81,7 +75,7 @@ stop()
 {
 	killall vlmcsd
 	read_conf
-	if [ -n "$srv_host" ];then
+	if [ -n "$host_name" ];then
 		sed -i '/^srv-host=_vlmcs\._tcp/d' /etc/dnsmasq.conf
 	fi
 	if [ -n "$whitecron" ];then
