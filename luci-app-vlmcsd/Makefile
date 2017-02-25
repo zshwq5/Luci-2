@@ -8,6 +8,7 @@ include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI app for vlmcsd
 LUCI_DEPENDS:=+vlmcsd
+LUCI_PKGARCH:=all
 
 include ../../luci.mk
 
