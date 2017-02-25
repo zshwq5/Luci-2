@@ -28,11 +28,11 @@ start()
 		if [ -n "$whitecron" ];then
 			if [ "$emp_log" -ne "$whitecron" ];then
 				sed -i '/vlmcsd\.log/d' /etc/crontabs/root >/dev/null 2>&1
-				echo "* * * * $emp_log echo \"\" >/var/log/vlmcsd.log >/dev/null 2>&1" >> /etc/crontabs/root
+				echo "0 0 * * $emp_log echo \"\" >/var/log/vlmcsd.log >/dev/null 2>&1" >> /etc/crontabs/root
 				/etc/init.d/cron restart >/dev/null 2>&1
 			fi
 		else
-			echo "* * * * $emp_log echo \"\" >/var/log/vlmcsd.log >/dev/null 2>&1" >> /etc/crontabs/root
+			echo "0 0 * * $emp_log echo \"\" >/var/log/vlmcsd.log >/dev/null 2>&1" >> /etc/crontabs/root
 			/etc/init.d/cron restart >/dev/null 2>&1
 		fi
 	else
