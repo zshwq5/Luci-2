@@ -110,18 +110,27 @@ get_global_target() {
 			echo "RETURN"
 		;;
 		S)
-			echo "SSR_GLO_NCN"
+			echo "SHADOWSOCKS_NCN"
 		;;
 		M)
-			echo "SSR_GLO_GFW"
+			echo "SHADOWSOCKS_GFW"
 		;;
 		G)
-			echo "SSR_GLO_ALL"
+			echo "SHADOWSOCKS_ALL"
 		;;
 		V)
-			echo "SSR_GLO_OVS"
+			echo "SHADOWSOCKS_OVS"
 		;;
 	esac
+}
+
+ipt_redirect()
+{
+	if [ "$1" = "tcp" ];then
+		echo "-p tcp -j REDIRECT --to $2"
+	else
+		echo "-p udp -j TPROXY --on-port $2 --tproxy-mark 0x01/0x01"
+	fi
 }
 
 ipt_rules() {
@@ -138,41 +147,34 @@ ipt_rules() {
 		ip rule add fwmark 1 lookup 100
 		ip route add local default dev lo table 100
 	fi
-	for i in SSR_FIRST_PRE SSR_LATER_FW SSR_GLO_NCN SSR_GLO_GFW SSR_GLO_ALL SSR_GLO_OVS;do
+	for i in SHADOWSOCKS SHADOWSOCKS_NCN SHADOWSOCKS_GFW SHADOWSOCKS_ALL SHADOWSOCKS_OVS;do
 		iptables -t $table -N $i
 		iptables -t $table -F $i
 	done
-	iptables -t $table -A SSR_FIRST_PRE -m set --match-set local dst -j RETURN
-	iptables -t $table -A SSR_FIRST_PRE -d $3 -j RETURN
-	iptables -t $table -A SSR_FIRST_PRE -m set --match-set SSR_AC_BYP src -j RETURN
-	iptables -t $table -A SSR_FIRST_PRE -m set --match-set SSR_AC_NCN src -j SSR_GLO_NCN
-	iptables -t $table -A SSR_FIRST_PRE -m set --match-set SSR_AC_GFW src -j SSR_GLO_GFW
-	iptables -t $table -A SSR_FIRST_PRE -m set --match-set SSR_AC_ALL src -j SSR_GLO_ALL
-	iptables -t $table -A SSR_FIRST_PRE -m set --match-set SSR_AC_OVS src -j SSR_GLO_OVS
-	iptables -t $table -A SSR_FIRST_PRE -j $(get_global_target $2)
-	iptables -t $table -A SSR_GLO_NCN -m set --match-set china dst -j RETURN
-	iptables -t $table -A SSR_GLO_NCN -j SSR_LATER_FW
-	iptables -t $table -A SSR_GLO_GFW -m set ! --match-set china-banned dst -j RETURN
-	iptables -t $table -A SSR_GLO_GFW -m set --match-set china dst -j RETURN
-	iptables -t $table -A SSR_GLO_GFW -j SSR_LATER_FW
-	iptables -t $table -A SSR_GLO_ALL -j SSR_LATER_FW
-	iptables -t $table -A SSR_GLO_OVS -m set ! --match-set unblock-youku dst -j RETURN
-	iptables -t $table -A SSR_GLO_OVS -j SSR_LATER_FW
+	
+	iptables -t $table -A SHADOWSOCKS -m set --match-set local dst -j RETURN
+	iptables -t $table -A SHADOWSOCKS -d $3 -j RETURN
+	iptables -t $table -A SHADOWSOCKS -m set --match-set SSR_AC_BYP src -j RETURN
+	iptables -t $table -A SHADOWSOCKS -m set --match-set SSR_AC_NCN src -j SHADOWSOCKS_NCN
+	iptables -t $table -A SHADOWSOCKS -m set --match-set SSR_AC_GFW src -j SHADOWSOCKS_GFW
+	iptables -t $table -A SHADOWSOCKS -m set --match-set SSR_AC_ALL src -j SHADOWSOCKS_ALL
+	iptables -t $table -A SHADOWSOCKS -m set --match-set SSR_AC_OVS src -j SHADOWSOCKS_OVS
+	iptables -t $table -A SHADOWSOCKS -j $(get_global_target $2)
+	# 非中国ip
+	iptables -t $table -A SHADOWSOCKS_NCN -m set --match-set china dst -j RETURN
+	iptables -t $table -A SHADOWSOCKS_NCN $(ipt_redirect $protocol $4)
+	# gfwlist列表
+	iptables -t $table -A SHADOWSOCKS_GFW -m set ! --match-set china-banned dst -j RETURN
+	iptables -t $table -A SHADOWSOCKS_GFW -m set --match-set china dst -j RETURN
+	iptables -t $table -A SHADOWSOCKS_GFW $(ipt_redirect $protocol $4)
+	# 全局代理
+	iptables -t $table -A SHADOWSOCKS_ALL $(ipt_redirect $protocol $4)
+	# 海外看优酷
+	iptables -t $table -A SHADOWSOCKS_OVS -m set ! --match-set unblock-youku dst -j RETURN
+	iptables -t $table -A SHADOWSOCKS_OVS $(ipt_redirect $protocol $4)
+	#应用规则
+	iptables -t $table -I PREROUTING 1 -p $protocol -j SHADOWSOCKS
 
-	# iptables -t $table -N shadowsocksr_pre
-	# iptables -t $table -F shadowsocksr_pre
-	# iptables -t $table -A shadowsocksr_pre -m set --match-set local dst -j RETURN
-	# iptables -t $table -A shadowsocksr_pre -d $3 -j RETURN
-	local subnet
-	for subnet in $5; do
-		if [ "$protocol" = "tcp" ];then
-			iptables -t nat -A SSR_LATER_FW -s $subnet -p tcp -j REDIRECT --to $4
-		else
-			iptables -t mangle -A SSR_LATER_FW -s $subnet -p udp \
-			-j TPROXY --on-port $4 --tproxy-mark 0x01/0x01
-		fi
-	done
-	iptables -t $table -I PREROUTING 1 -p $protocol -j SSR_FIRST_PRE
 	if [ "$protocol" = "tcp" ];then
 		#路由器自身访问openwrt,lede,github,raw.githubusercontent.com,通常用于更新gfwlist和源
 		iptables -t $table -I OUTPUT -p $protocol -d 192.30.252.0/22 -j REDIRECT --to-port $4
@@ -185,7 +187,7 @@ ipt_rules() {
 	fi
 }
 flush_rules() {
-	iptables-save -c | grep -v -i -E "china|SSR_|REDIRECT --to-ports $SS_REDIR_PORT" | iptables-restore -c
+	iptables-save -c | grep -v -i -E "china|SHADOWSOCKS|REDIRECT --to-ports $SS_REDIR_PORT" | iptables-restore -c
 	if command -v ip >/dev/null 2>&1; then
 		ip rule del fwmark 1 lookup 100 2>/dev/null
 		ip route del local default dev lo table 100 2>/dev/null
